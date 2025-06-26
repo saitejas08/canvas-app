@@ -19,7 +19,7 @@ importers:
         version: 5.8.2
 
   apps/http-backend:
-    dependencies:
+    devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
@@ -62,7 +62,7 @@ importers:
         version: 5.8.2
 
   apps/ws-backend:
-    dependencies:
+    devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
