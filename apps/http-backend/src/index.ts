@@ -6,18 +6,20 @@ import { CreateUserSchema, SigninSchema, CreateRoomSchema } from "@repo/common/t
 import { prismaClient } from "@repo/db/client";
 
 const app = express();
+app.use(express.json());
 
 app.post("/signup", async (req, res) => {
     //db call
     const parsedData = CreateUserSchema.safeParse(req.body);
     if (!parsedData.success) {
+        console.log(parsedData.error);
         res.json({
             message: "Incorrect Inputs"
         })
         return;
     }
     try {
-        await prismaClient.user.create({
+        const user = await prismaClient.user.create({
             data: {
                 email: parsedData.data?.username,
                 password: parsedData.data.password,
@@ -26,7 +28,7 @@ app.post("/signup", async (req, res) => {
         })
 
         res.json({
-            userId: "123"
+            userId: user.id
         })
     } catch (e) {
         res.status(411).json({
@@ -35,18 +37,32 @@ app.post("/signup", async (req, res) => {
     }
 })
 
-app.post("/signin", (req, res) => {
-    const data = SigninSchema.safeParse(req.body);
-    if (!data.success) {
+app.post("/signin", async (req, res) => {
+    const parsedData = SigninSchema.safeParse(req.body);
+    if (!parsedData.success) {
         res.json({
             message: "Incorrect Inputs"
         })
         return;
     }
 
-    const userId = 1;
+    //TODO: Compare the hashed pwd here
+    const user = await prismaClient.user.findFirst({
+        where: {
+            email: parsedData.data.username,
+            password: parsedData.data.password
+        }
+    })
+
+    if (!user) {
+        res.status(403).json({
+            message: "Not Authorized"
+        })
+        return;
+    }
+
     const token = jwt.sign({
-        userId
+        userId: user?.id
     }, JWT_SECRET);
 
     res.json({
@@ -54,7 +70,7 @@ app.post("/signin", (req, res) => {
     })
 })
 
-app.post("/room", middleware, (req, res) => {
+app.post("/room", middleware, async (req, res) => {
     //db call
     const data = CreateRoomSchema.safeParse(req.body);
     if (!data.success) {
