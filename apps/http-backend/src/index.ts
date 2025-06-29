@@ -22,6 +22,7 @@ app.post("/signup", async (req, res) => {
         const user = await prismaClient.user.create({
             data: {
                 email: parsedData.data?.username,
+                // TODO: hash the pw
                 password: parsedData.data.password,
                 name: parsedData.data.name
             }
@@ -72,16 +73,34 @@ app.post("/signin", async (req, res) => {
 
 app.post("/room", middleware, async (req, res) => {
     //db call
-    const data = CreateRoomSchema.safeParse(req.body);
-    if (!data.success) {
+    const parsedData = CreateRoomSchema.safeParse(req.body);
+    if (!parsedData.success) {
         res.json({
             message: "Incorrect Inputs"
         })
         return;
     }
-    res.json({
-        roomId: 123
-    })
+
+    //@ts-ignore: TODO: Fix This
+
+    const userId = req.userId;
+
+    try {
+        const room = await prismaClient.room.create({
+            data: {
+                slug: parsedData.data.name,
+                adminId: userId
+            }
+        })
+
+        res.json({
+            roomId: room.id
+        })
+    } catch (e) {
+        res.status(411).json({
+            message: "Room already exists with this name"
+        })
+    }
 })
 
 app.listen(3001);
