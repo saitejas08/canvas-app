@@ -1,3 +1,5 @@
+"use client";
+
 import AnimatedBackground from "@/components/AnimatedBackground";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";

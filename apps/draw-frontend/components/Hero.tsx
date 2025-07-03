@@ -1,4 +1,5 @@
 import { Button } from "@repo/ui/button";
+import Link from "next/link";
 
 const Hero = () => {
     return (
@@ -16,12 +17,14 @@ const Hero = () => {
                 </p>
 
                 <div className="mb-16 animate-fade-in-up-delay-2">
-                    <Button
-                        size="lg"
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                    >
-                        Start Drawing →
-                    </Button>
+                    <Link href={"/signin"}>
+                        <Button
+                            size="lg"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                        >
+                            Start Drawing →
+                        </Button>
+                    </Link>
                 </div>
 
                 <div className="glass-card rounded-2xl p-8 mx-auto max-w-4xl animate-fade-in-up-delay-3">

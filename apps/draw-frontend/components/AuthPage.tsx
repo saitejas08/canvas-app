@@ -65,6 +65,9 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
                 <div className="pt-2">
                     <button
                         className="w-full py-3 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-all shadow-md hover:shadow-lg"
+                        onClick={() => {
+
+                        }}
                     >
                         {isSignin ? "Sign in" : "Sign up"}
                     </button>
