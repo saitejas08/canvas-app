@@ -1,3 +1,17 @@
+type Shape = {
+    type: "rect";
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+} | {
+    type: "circle";
+    centerX: number;
+    centerY: number;
+    radius: number;
+}
+
+
 export function initDraw(canvas: HTMLCanvasElement) {
     const ctx = canvas.getContext("2d");
 
